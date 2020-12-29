@@ -7,6 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using storeApp.Data;
+using storeApp.Repository;
 
 namespace storeApp
 {
@@ -16,9 +19,12 @@ namespace storeApp
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDbContext<ItemContext>(x => x.UseSqlServer("Server=DESKTOP-KSVV9J9\\SQLEXPRESS;Database = StoreApp; Integrated Security=True"));
             services.AddControllersWithViews();
 #if DEBUG
             services.AddRazorPages().AddRazorRuntimeCompilation();
+            services.AddScoped<ItemRepository, ItemRepository>();
 #endif
         }
 

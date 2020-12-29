@@ -12,20 +12,21 @@ namespace storeApp.Controllers
     {
         private readonly ItemRepository _itemRepository = null;
 
-        public ItemController()
+        public ItemController(ItemRepository itemRepository)
         {
-            _itemRepository = new ItemRepository();
+            _itemRepository = itemRepository;
         }
+
         public ViewResult GetAllItems()
         {
-            var data =  _itemRepository.GetAllItems();
+            var data = _itemRepository.GetAllItems();
 
             return View(data);
         }
 
         public ViewResult GetItem(int id)
         {
-            var data =  _itemRepository.GetItem(id);
+            var data = _itemRepository.GetItem(id);
             return View(data);
         }
 
@@ -33,5 +34,22 @@ namespace storeApp.Controllers
         {
             return _itemRepository.SearchItem(Name);
         }
+
+        public ViewResult AddItem()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddItem(Item item)
+        {
+            int id = _itemRepository.AddItem(item);
+            if (id > 0)
+            {
+                return RedirectToAction(nameof(AddItem));
+            }
+            return View();
+        }
+
     }
 }
