@@ -17,16 +17,16 @@ namespace storeApp.Controllers
             _itemRepository = itemRepository;
         }
 
-        public ViewResult GetAllItems()
+        public async Task<ViewResult>  GetAllItems()
         {
-            var data = _itemRepository.GetAllItems();
+            var data = await _itemRepository.GetAllItems();
 
             return View(data);
         }
 
-        public ViewResult GetItem(int id)
+        public async Task<ViewResult> GetItem(int id)
         {
-            var data = _itemRepository.GetItem(id);
+            var data = await _itemRepository.GetItem(id);
             return View(data);
         }
 
@@ -35,18 +35,23 @@ namespace storeApp.Controllers
             return _itemRepository.SearchItem(Name);
         }
 
-        public ViewResult AddItem()
+        public ViewResult AddItem(bool isSuccess = false, int itemId = 0)
         {
+            ViewBag.isSuccess = isSuccess;
+            ViewBag.itemId = itemId;
             return View();
         }
 
         [HttpPost]
-        public IActionResult AddItem(Item item)
+        public async Task<IActionResult> AddItem(Item item)
         {
-            int id = _itemRepository.AddItem(item);
-            if (id > 0)
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(AddItem));
+                int id = await _itemRepository.AddItem(item);
+                if (id > 0)
+                {
+                    return RedirectToAction(nameof(AddItem), new { isSuccess = true, itemId = id });
+                }
             }
             return View();
         }

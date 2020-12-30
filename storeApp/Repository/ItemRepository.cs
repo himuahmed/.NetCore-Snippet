@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using storeApp.Data;
 using storeApp.Models;
 
@@ -16,7 +18,7 @@ namespace storeApp.Repository
             _context = context;
         }
 
-        public int AddItem(Item item)
+        public async Task<int> AddItem(Item item)
         {
             var newItem = new Items()
             {
@@ -26,20 +28,54 @@ namespace storeApp.Repository
                 Price = item.Price
             };
 
-            _context.Items.Add(newItem);
-            _context.SaveChanges();
+           await _context.Items.AddAsync(newItem);
+           await _context.SaveChangesAsync();
 
             return newItem.Id;
         }
 
-        public List<Item> GetAllItems()
+        public async Task<List<Item>> GetAllItems()
         {
-            return Items();
+            var newItem = new List<Item>();
+            var items = await _context.Items.ToListAsync();
+            if (items?.Any() == true)
+            {
+                foreach(var item in items)
+                {
+                    newItem.Add(new Item()
+                    {
+                        Name = item.Name,
+                        Type = item.Type,
+                        Price = item.Price,
+                        Id = item.Id,
+                        Detail = item.Detail
+                    });
+                }
+            }
+
+            return newItem;
         }
 
-        public Item GetItem(int id)
+        public async Task<Items> GetItem(int id)
         {
-            return Items().FirstOrDefault(x => x.Id == id);
+            
+            var newItem = await _context.Items.FindAsync(id);
+            //return Items().FirstOrDefault(x => x.Id == id);
+            if (newItem != null)
+            {
+                var data = new Items()
+                {
+                    Id = newItem.Id,
+                    Name = newItem.Name,
+                    Type = newItem.Type,
+                    Price = newItem.Price,
+                    Detail = newItem.Detail
+                };
+
+                return data;
+            }
+
+            return null;
         }
 
         public List<Item> SearchItem(string Name)
