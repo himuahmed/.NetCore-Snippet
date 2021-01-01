@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Threading.Tasks;
 
 namespace storeApp.Data
@@ -12,5 +13,9 @@ namespace storeApp.Data
         public string Type { get; set; }
         public int Price { get; set; }
         public string Detail { get; set; }
+        public int OutletId { get; set; }
+
+        public Outlet Outlet { get; set; }
+        
     }
 }

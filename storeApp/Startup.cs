@@ -25,6 +25,7 @@ namespace storeApp
 #if DEBUG
             services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddScoped<ItemRepository, ItemRepository>();
+            services.AddScoped<OutletRepository, OutletRepository>();
 #endif
         }
 

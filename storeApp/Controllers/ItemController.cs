@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using storeApp.Models;
 using storeApp.Repository;
 
@@ -11,10 +12,12 @@ namespace storeApp.Controllers
     public class ItemController : Controller
     {
         private readonly ItemRepository _itemRepository = null;
+        private readonly OutletRepository _outletRepository = null;
 
-        public ItemController(ItemRepository itemRepository)
+        public ItemController(ItemRepository itemRepository, OutletRepository outletRepository)
         {
             _itemRepository = itemRepository;
+            _outletRepository = outletRepository;
         }
 
         public async Task<ViewResult>  GetAllItems()
@@ -35,8 +38,12 @@ namespace storeApp.Controllers
             return _itemRepository.SearchItem(Name);
         }
 
-        public ViewResult AddItem(bool isSuccess = false, int itemId = 0)
+        public async Task<ViewResult> AddItem(bool isSuccess = false, int itemId = 0)
         {
+
+            var outlets = await _outletRepository.GetAllOutlet();
+            ViewBag.outlets = new SelectList(outlets, "Id","Name");
+
             ViewBag.isSuccess = isSuccess;
             ViewBag.itemId = itemId;
             return View();
@@ -45,6 +52,8 @@ namespace storeApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddItem(Item item)
         {
+            var outlets = await _outletRepository.GetAllOutlet();
+            ViewBag.outlets = new SelectList(outlets, "Id", "Name");
             if (ModelState.IsValid)
             {
                 int id = await _itemRepository.AddItem(item);

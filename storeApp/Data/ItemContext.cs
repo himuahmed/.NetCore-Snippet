@@ -13,5 +13,6 @@ namespace storeApp.Data
             
         }
         public  DbSet<Items> Items { get; set; }
+        public  DbSet<Outlet> Outlets { get; set; }
     }
 }

@@ -17,5 +17,10 @@ namespace storeApp.Models
         public int Price { get; set; }
         [Required]
         public string Detail { get; set; }
+        [Required]
+        public int OutletId { get; set; }
+
+        public string OutletName { get; set; }
+
     }
 }

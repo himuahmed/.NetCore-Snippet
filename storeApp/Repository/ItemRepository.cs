@@ -25,7 +25,8 @@ namespace storeApp.Repository
                 Name = item.Name,
                 Type = item.Type,
                 Detail = item.Detail,
-                Price = item.Price
+                Price = item.Price,
+                OutletId = item.OutletId
             };
 
            await _context.Items.AddAsync(newItem);
@@ -36,64 +37,40 @@ namespace storeApp.Repository
 
         public async Task<List<Item>> GetAllItems()
         {
-            var newItem = new List<Item>();
-            var items = await _context.Items.ToListAsync();
-            if (items?.Any() == true)
+            return await _context.Items.Select(item => new Item()
             {
-                foreach(var item in items)
-                {
-                    newItem.Add(new Item()
-                    {
-                        Name = item.Name,
-                        Type = item.Type,
-                        Price = item.Price,
-                        Id = item.Id,
-                        Detail = item.Detail
-                    });
-                }
-            }
+                Name = item.Name,
+                Type = item.Type,
+                Price = item.Price,
+                Id = item.Id,
+                Detail = item.Detail,
+                OutletId = item.OutletId,
+                OutletName = item.Outlet.Name
+            }).ToListAsync();
 
-            return newItem;
         }
 
-        public async Task<Items> GetItem(int id)
+        public async Task<Item> GetItem(int id)
         {
-            
-            var newItem = await _context.Items.FindAsync(id);
-            //return Items().FirstOrDefault(x => x.Id == id);
-            if (newItem != null)
+
+
+            return await _context.Items.Where(x => x.Id == id).Select(item => new Item()
             {
-                var data = new Items()
-                {
-                    Id = newItem.Id,
-                    Name = newItem.Name,
-                    Type = newItem.Type,
-                    Price = newItem.Price,
-                    Detail = newItem.Detail
-                };
+                Id = item.Id,
+                Name = item.Name,
+                Type = item.Type,
+                Price = item.Price,
+                Detail = item.Detail,
+                OutletName = item.Outlet.Name
+            }).FirstOrDefaultAsync();
 
-                return data;
-            }
-
-            return null;
         }
 
         public List<Item> SearchItem(string Name)
         {
-            return Items().Where(x => x.Name == Name).ToList();
+            return null;
         }
 
-
-        private List<Item> Items()
-        {
-            return new List<Item>()
-            {
-                new Item() {Id = 1, Name = "Coke", Type = "Grocery"},
-                new Item() {Id = 2, Name = "Chips", Type = "Grocery"},
-                new Item() {Id = 3, Name = "Cake", Type = "Grocery"},
-                new Item() {Id = 4, Name = "Eggs", Type = "Food"}
-            };
-        }
 
     }
 }
