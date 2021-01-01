@@ -9,13 +9,13 @@ namespace storeApp.Models
     {
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Enter Item  name please.")]
         public string Name { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Enter Item type please.")]
         public string Type { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Enter Item price please.")]
         public int Price { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Enter Item detail please.")]
         public string Detail { get; set; }
         [Required]
         public int OutletId { get; set; }
