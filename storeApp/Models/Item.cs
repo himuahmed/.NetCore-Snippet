@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
+
 namespace storeApp.Models
 {
     public class Item
@@ -20,10 +22,14 @@ namespace storeApp.Models
         [StringLength(100, MinimumLength = 5)]
         [Required(ErrorMessage = "Enter Item detail please.")]
         public string Detail { get; set; }
+        [Display(Name = "Outlet Name")]
         [Required]
         public int OutletId { get; set; }
 
         public string OutletName { get; set; }
+        
+        [Required]
+        public IFormFile Photo { get; set; }
 
     }
 }

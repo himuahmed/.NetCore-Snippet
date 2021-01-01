@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using storeApp.Models;
 using storeApp.Repository;
@@ -13,11 +15,13 @@ namespace storeApp.Controllers
     {
         private readonly ItemRepository _itemRepository = null;
         private readonly OutletRepository _outletRepository = null;
+        private readonly IWebHostEnvironment _iWebHostEnvironment = null;
 
-        public ItemController(ItemRepository itemRepository, OutletRepository outletRepository)
+        public ItemController(ItemRepository itemRepository, OutletRepository outletRepository, IWebHostEnvironment iWebHostEnvironment)
         {
             _itemRepository = itemRepository;
             _outletRepository = outletRepository;
+            _iWebHostEnvironment = iWebHostEnvironment;
         }
 
         public async Task<ViewResult>  GetAllItems()
@@ -41,6 +45,8 @@ namespace storeApp.Controllers
         public async Task<ViewResult> AddItem(bool isSuccess = false, int itemId = 0)
         {
 
+            
+
             var outlets = await _outletRepository.GetAllOutlet();
             ViewBag.outlets = new SelectList(outlets, "Id","Name");
 
@@ -52,10 +58,18 @@ namespace storeApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddItem(Item item)
         {
-            var outlets = await _outletRepository.GetAllOutlet();
-            ViewBag.outlets = new SelectList(outlets, "Id", "Name");
+            
             if (ModelState.IsValid)
             {
+                if (item.Photo != null)
+                {
+                    string folder = "Images/ItemPhoto";
+                    folder += Guid.NewGuid().ToString() + "=" + item.Photo.FileName;
+                    string serverPath = Path.Combine(_iWebHostEnvironment.WebRootPath, folder);
+
+                    await item.Photo.CopyToAsync(new FileStream(serverPath, FileMode.Create));
+                }
+
                 int id = await _itemRepository.AddItem(item);
                 if (id > 0)
                 {
