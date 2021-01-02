@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using storeApp.Models;
 using storeApp.Repository;
@@ -64,14 +65,7 @@ namespace storeApp.Controllers
                 if (item.Photo != null)
                 {
                     string folder = "Images/ItemPhoto";
-                    folder += Guid.NewGuid().ToString() + "=" + item.Photo.FileName;
-                    string serverPath = Path.Combine(_iWebHostEnvironment.WebRootPath, folder);
-
-                    item.PhotoUrl = "/" + folder;
-
-                    await item.Photo.CopyToAsync(new FileStream(serverPath, FileMode.Create));
-
-
+                    item.PhotoUrl= await ImageUpload(folder, item.Photo);
                 }
 
                 int id = await _itemRepository.AddItem(item);
@@ -83,5 +77,15 @@ namespace storeApp.Controllers
             return View();
         }
 
+        private async Task<string> ImageUpload(string folder, IFormFile file)
+        {
+            
+            folder += Guid.NewGuid().ToString() + "=" + file.FileName;
+            string serverPath = Path.Combine(_iWebHostEnvironment.WebRootPath, folder);
+
+            await file.CopyToAsync(new FileStream(serverPath, FileMode.Create));
+
+            return "/" + serverPath;
+        }
     }
 }
