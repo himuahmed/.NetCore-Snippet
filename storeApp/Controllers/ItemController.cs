@@ -67,7 +67,11 @@ namespace storeApp.Controllers
                     folder += Guid.NewGuid().ToString() + "=" + item.Photo.FileName;
                     string serverPath = Path.Combine(_iWebHostEnvironment.WebRootPath, folder);
 
+                    item.PhotoUrl = "/" + folder;
+
                     await item.Photo.CopyToAsync(new FileStream(serverPath, FileMode.Create));
+
+
                 }
 
                 int id = await _itemRepository.AddItem(item);

@@ -26,7 +26,8 @@ namespace storeApp.Repository
                 Type = item.Type,
                 Detail = item.Detail,
                 Price = item.Price,
-                OutletId = item.OutletId
+                OutletId = item.OutletId,
+                PhotoUrl = item.PhotoUrl
             };
 
            await _context.Items.AddAsync(newItem);
@@ -45,7 +46,8 @@ namespace storeApp.Repository
                 Id = item.Id,
                 Detail = item.Detail,
                 OutletId = item.OutletId,
-                OutletName = item.Outlet.Name
+                OutletName = item.Outlet.Name,
+                PhotoUrl = item.PhotoUrl
             }).ToListAsync();
 
         }
@@ -61,7 +63,8 @@ namespace storeApp.Repository
                 Type = item.Type,
                 Price = item.Price,
                 Detail = item.Detail,
-                OutletName = item.Outlet.Name
+                OutletName = item.Outlet.Name,
+                PhotoUrl = item.PhotoUrl
             }).FirstOrDefaultAsync();
 
         }

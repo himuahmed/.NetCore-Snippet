@@ -31,5 +31,7 @@ namespace storeApp.Models
         [Required]
         public IFormFile Photo { get; set; }
 
+        public string PhotoUrl { get; set; }
+
     }
 }

@@ -14,7 +14,7 @@ namespace storeApp.Data
         public int Price { get; set; }
         public string Detail { get; set; }
         public int OutletId { get; set; }
-
+        public string PhotoUrl { get; set; }
         public Outlet Outlet { get; set; }
         
     }
