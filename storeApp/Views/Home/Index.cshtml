@@ -1,10 +1,15 @@
 ﻿
 <h1>This is homepage !!</h1>
 
+@await Component.InvokeAsync("TopItem")
+
+
+<vc:top-item></vc:top-item>
+
 @section alertfromindex {
     <script>
-        $(document).ready(function() {
-            alert("Index is loaded");
+        $(document).ready(function () {
+            //alert("Index is loaded");
         });
     </script>
 }

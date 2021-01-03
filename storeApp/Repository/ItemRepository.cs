@@ -9,7 +9,7 @@ using storeApp.Models;
 
 namespace storeApp.Repository
 {
-    public class ItemRepository
+    public class ItemRepository : IItemRepository
     {
         private readonly ItemContext _context = null;
 

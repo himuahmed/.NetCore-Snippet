@@ -16,17 +16,18 @@ namespace storeApp.Controllers
 {
     public class ItemController : Controller
     {
-        private readonly ItemRepository _itemRepository = null;
-        private readonly OutletRepository _outletRepository = null;
+        private readonly IItemRepository _itemRepository = null;
+        private readonly IOutletRepository _outletRepository = null;
         private readonly IWebHostEnvironment _iWebHostEnvironment = null;
 
-        public ItemController(ItemRepository itemRepository, OutletRepository outletRepository, IWebHostEnvironment iWebHostEnvironment)
+        public ItemController(IItemRepository itemRepository, IOutletRepository outletRepository, IWebHostEnvironment iWebHostEnvironment)
         {
             _itemRepository = itemRepository;
             _outletRepository = outletRepository;
             _iWebHostEnvironment = iWebHostEnvironment;
         }
 
+        [Route("Items")]
         public async Task<ViewResult>  GetAllItems()
         {
             var data = await _itemRepository.GetAllItems();
@@ -34,6 +35,7 @@ namespace storeApp.Controllers
             return View(data);
         }
 
+        [Route("search-item/{id}")]
         public async Task<ViewResult> GetItem(int id)
         {
             var data = await _itemRepository.GetItem(id);
@@ -45,6 +47,7 @@ namespace storeApp.Controllers
             return _itemRepository.SearchItem(Name);
         }
 
+        [Route("Add-Item")]
         public async Task<ViewResult> AddItem(bool isSuccess = false, int itemId = 0)
         {
 

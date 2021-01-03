@@ -8,7 +8,7 @@ using storeApp.Models;
 
 namespace storeApp.Repository
 {
-    public class OutletRepository
+    public class OutletRepository : IOutletRepository
     {
         private readonly ItemContext _itemContext = null;
 
