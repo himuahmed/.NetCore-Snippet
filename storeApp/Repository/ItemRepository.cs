@@ -29,7 +29,16 @@ namespace storeApp.Repository
                 OutletId = item.OutletId,
                 PhotoUrl = item.PhotoUrl
             };
-
+            newItem.ItemGallery = new List<ItemGallery>();
+            foreach (var file in item.Gallery)
+            {
+                newItem.ItemGallery.Add(new ItemGallery()
+                {
+                    Name = file.Name,
+                    Url = file.Url
+                });
+            }
+             
            await _context.Items.AddAsync(newItem);
            await _context.SaveChangesAsync();
 
@@ -47,7 +56,13 @@ namespace storeApp.Repository
                 Detail = item.Detail,
                 OutletId = item.OutletId,
                 OutletName = item.Outlet.Name,
-                PhotoUrl = item.PhotoUrl
+                PhotoUrl = item.PhotoUrl,
+                Gallery = item.ItemGallery.Select(x => new ImageGallery()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Url = x.Url
+                }).ToList()
             }).ToListAsync();
 
         }
@@ -64,7 +79,13 @@ namespace storeApp.Repository
                 Price = item.Price,
                 Detail = item.Detail,
                 OutletName = item.Outlet.Name,
-                PhotoUrl = item.PhotoUrl
+                PhotoUrl = item.PhotoUrl,
+                Gallery = item.ItemGallery.Select(x=> new ImageGallery()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Url = x.Url
+                }).ToList()
             }).FirstOrDefaultAsync();
 
         }
