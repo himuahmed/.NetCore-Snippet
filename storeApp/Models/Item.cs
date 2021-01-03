@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Mime;
 using Microsoft.AspNetCore.Http;
 
 namespace storeApp.Models
@@ -32,6 +33,11 @@ namespace storeApp.Models
         public IFormFile Photo { get; set; }
 
         public string PhotoUrl { get; set; }
+
+        [Display(Name = "Upload Images.")]
+        public IFormFileCollection Images { get; set; }
+
+        public List<ImageGallery> Gallery { get; set; }
 
     }
 }

@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -64,10 +66,29 @@ namespace storeApp.Controllers
             {
                 if (item.Photo != null)
                 {
-                    string folder = "Images/ItemPhoto";
+                    string folder = "Images/ItemPhoto/";
                     item.PhotoUrl= await ImageUpload(folder, item.Photo);
                 }
 
+                item.Gallery = new List<ImageGallery>();
+
+                if (item.Images != null)
+                {
+                    string folder = "Images/Gallery";
+                    
+                    foreach (var file in item.Images)
+                    {
+                        var gallery = new ImageGallery()
+                        {
+                            Name = file.FileName,
+                            Url = await ImageUpload(folder, file),
+                        };
+
+                        item.Gallery.Add(gallery);
+                    };
+                        
+                }
+                 
                 int id = await _itemRepository.AddItem(item);
                 if (id > 0)
                 {
@@ -80,7 +101,8 @@ namespace storeApp.Controllers
         private async Task<string> ImageUpload(string folder, IFormFile file)
         {
             
-            folder += Guid.NewGuid().ToString() + "=" + file.FileName;
+            folder += Guid.NewGuid().ToString() + "_" + file.FileName;
+
             string serverPath = Path.Combine(_iWebHostEnvironment.WebRootPath, folder);
 
             await file.CopyToAsync(new FileStream(serverPath, FileMode.Create));

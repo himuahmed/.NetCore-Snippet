@@ -16,6 +16,8 @@ namespace storeApp.Data
         public int OutletId { get; set; }
         public string PhotoUrl { get; set; }
         public Outlet Outlet { get; set; }
+
+        public ICollection<ItemGallery> ItemGallery { get; set; }
         
     }
 }
