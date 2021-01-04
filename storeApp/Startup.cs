@@ -7,7 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using storeApp.Data;
 using storeApp.Repository;
 
@@ -15,12 +17,19 @@ namespace storeApp
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        public Startup(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddDbContext<ItemContext>(x => x.UseSqlServer("Server=DESKTOP-KSVV9J9\\SQLEXPRESS;Database = StoreApp; Integrated Security=True"));
+            services.AddDbContext<ItemContext>(x => x.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ItemContext>();
+
             services.AddControllersWithViews();
 #if DEBUG
             services.AddRazorPages().AddRazorRuntimeCompilation();
@@ -41,6 +50,7 @@ namespace storeApp
 
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
