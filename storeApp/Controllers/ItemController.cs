@@ -51,10 +51,8 @@ namespace storeApp.Controllers
         public async Task<ViewResult> AddItem(bool isSuccess = false, int itemId = 0)
         {
 
-            
-
             var outlets = await _outletRepository.GetAllOutlet();
-            ViewBag.outlets = new SelectList(outlets, "Id","Name");
+            //ViewBag.outlets = new SelectList(outlets, "Id","Name");
 
             ViewBag.isSuccess = isSuccess;
             ViewBag.itemId = itemId;
@@ -62,6 +60,7 @@ namespace storeApp.Controllers
         }
 
         [HttpPost]
+        [Route("Add-Item")]
         public async Task<IActionResult> AddItem(Item item)
         {
             
@@ -77,14 +76,14 @@ namespace storeApp.Controllers
 
                 if (item.Images != null)
                 {
-                    string folder = "Images/Gallery";
+                    string folderGallery = "Images/Gallery/";
                     
                     foreach (var file in item.Images)
                     {
                         var gallery = new ImageGallery()
                         {
                             Name = file.FileName,
-                            Url = await ImageUpload(folder, file),
+                            Url = await ImageUpload(folderGallery, file),
                         };
 
                         item.Gallery.Add(gallery);
