@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using storeApp.Data;
+using storeApp.Models;
 using storeApp.Repository;
 
 namespace storeApp
@@ -28,7 +29,7 @@ namespace storeApp
         {
 
             services.AddDbContext<ItemContext>(x => x.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ItemContext>();
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ItemContext>();
 
             services.AddControllersWithViews();
 #if DEBUG

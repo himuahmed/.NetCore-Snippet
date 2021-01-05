@@ -8,6 +8,12 @@ namespace storeApp.Models
 {
     public class AccountModel
     {
+        [Display(Name = "Name:")]
+        public string Name { get; set; }
+
+        [Display(Name = "Address:")]
+        public string Address { get; set; }
+
         [Required(ErrorMessage = "Please enter email.")]
         [EmailAddress(ErrorMessage = "Enter a valid email.")]
         [Display(Name = "Email:")]
