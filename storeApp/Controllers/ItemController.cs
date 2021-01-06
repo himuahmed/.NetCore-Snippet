@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Policy;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -47,6 +48,7 @@ namespace storeApp.Controllers
             return _itemRepository.SearchItem(Name);
         }
 
+        [Authorize]
         [Route("Add-Item")]
         public async Task<ViewResult> AddItem(bool isSuccess = false, int itemId = 0)
         {
@@ -59,6 +61,7 @@ namespace storeApp.Controllers
             return View();
         }
 
+        
         [HttpPost]
         [Route("Add-Item")]
         public async Task<IActionResult> AddItem(Item item)

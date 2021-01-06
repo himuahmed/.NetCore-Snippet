@@ -45,5 +45,41 @@ namespace storeApp.Controllers
         }
 
 
+        [Route("login")]
+        public IActionResult SignIn()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> SignIn(SignInModel signInModel,string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _accountRepository.SignInAsync(signInModel);
+
+                if (result.Succeeded)
+                {
+                    if (!string.IsNullOrEmpty(returnUrl))
+                    {
+                        return LocalRedirect(returnUrl);
+                    }
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Error signing in");
+                }
+            }
+            return View(signInModel);
+        }
+
+        public async Task<IActionResult> LogOut()
+        {
+            await _accountRepository.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }

@@ -11,8 +11,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using storeApp.Data;
+using storeApp.Helpers;
 using storeApp.Models;
 using storeApp.Repository;
+using storeApp.Service;
 
 namespace storeApp
 {
@@ -39,6 +41,12 @@ namespace storeApp
             services.AddScoped<IItemRepository, ItemRepository>();
             services.AddScoped<IOutletRepository, OutletRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
+            services.ConfigureApplicationCookie(config =>
+            {
+                config.LoginPath = _configuration["ApplicationSettings:LoginPath"];
+            });
 
         }
 
@@ -53,6 +61,7 @@ namespace storeApp
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
