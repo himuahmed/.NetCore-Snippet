@@ -9,5 +9,6 @@ namespace storeApp.Repository
         Task<IdentityResult> CreateUserAsync(AccountModel userModel);
         Task<SignInResult> SignInAsync(SignInModel signInModel);
         Task SignOutAsync();
+        Task<IdentityResult> ChangePassword(ChangePasswordModel changePasswordModel);
     }
 }

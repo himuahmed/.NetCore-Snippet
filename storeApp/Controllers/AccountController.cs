@@ -81,5 +81,35 @@ namespace storeApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [Route("Change-Password")]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("Change-Password")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordModel changePasswordModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _accountRepository.ChangePassword(changePasswordModel);
+                if (result.Succeeded)
+                {
+                    ModelState.Clear();
+                    return View();
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("",error.Description);
+                    }
+                }
+            }
+
+            return View();
+        }
+
     }
 }

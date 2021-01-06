@@ -43,6 +43,8 @@ namespace storeApp
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
+
+            services.Configure<SMTPConfigModel>(_configuration.GetSection("SMTPConfig"));
             services.ConfigureApplicationCookie(config =>
             {
                 config.LoginPath = _configuration["ApplicationSettings:LoginPath"];

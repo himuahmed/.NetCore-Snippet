@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using storeApp.Models;
+using storeApp.Service;
 
 namespace storeApp.Repository
 {
@@ -11,10 +12,12 @@ namespace storeApp.Repository
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        public AccountRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        private readonly IUserService _userService;
+        public AccountRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IUserService userService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _userService = userService;
         }
         public async Task<IdentityResult> CreateUserAsync(AccountModel userModel)
         {
@@ -39,6 +42,14 @@ namespace storeApp.Repository
         public async Task SignOutAsync()
         {
              await _signInManager.SignOutAsync();
+        }
+
+        public async Task<IdentityResult> ChangePassword(ChangePasswordModel changePasswordModel)
+        {
+            var userId = _userService.GetUserId();
+            var user = await _userManager.FindByIdAsync(userId);
+            return await  _userManager.ChangePasswordAsync(user, changePasswordModel.CurrentPassword,
+                changePasswordModel.NewPassword);
         }
     }
 }
